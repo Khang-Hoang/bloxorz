@@ -262,6 +262,65 @@ def is_contain(array, state):
     return False
 
 
+def BFS(game):
+    queue = [game.initState]
+    visited = []
+    solution = []
+    while queue:
+        state = queue.pop()
+        visited.append(state)
+        # print(state.direct)
+        board = state.board
+        block = state.block
+        first = state.block.first
+        second = state.block.second
+        if first.x == second.x and first.y == second.y and board[first.x, first.y] == 100:
+            while state.traceback:
+                solution.insert(0, state)
+                state = state.traceback
+            solution.insert(0, state)
+            return solution
+        if block.is_stick():
+            up = game.get_next_state(state, 'up', 0)
+            down = game.get_next_state(state, 'down', 0)
+            left = game.get_next_state(state, 'left', 0)
+            right = game.get_next_state(state, 'right', 0)
+            check_up = game.is_valid(up) and not is_contain(visited, up) and not is_contain(queue, up)
+            check_down = game.is_valid(down) and not is_contain(visited, down) and not is_contain(queue, down)
+            check_left = game.is_valid(left) and not is_contain(visited, left) and not is_contain(queue, left)
+            check_right = game.is_valid(right) and not is_contain(visited, right) and not is_contain(queue, right)
+            if check_up: queue.insert(0,up)
+            if check_down: queue.insert(0,down)
+            if check_left: queue.insert(0,left)
+            if check_right: queue.insert(0,right)
+        else:
+            up1 = game.get_next_state(state, 'up', 1)
+            down1 = game.get_next_state(state, 'down', 1)
+            left1 = game.get_next_state(state, 'left', 1)
+            right1 = game.get_next_state(state, 'right', 1)
+            up2 = game.get_next_state(state, 'up', 2)
+            down2 = game.get_next_state(state, 'down', 2)
+            left2 = game.get_next_state(state, 'left', 2)
+            right2 = game.get_next_state(state, 'right', 2)
+            check_up1 = game.is_valid(up1) and not is_contain(visited, up1) and not is_contain(queue, up1)
+            check_down1 = game.is_valid(down1) and not is_contain(visited, down1) and not is_contain(queue, down1)
+            check_left1 = game.is_valid(left1) and not is_contain(visited, left1) and not is_contain(queue, left1)
+            check_right1 = game.is_valid(right1) and not is_contain(visited, right1) and not is_contain(queue, right1)
+            check_up2 = game.is_valid(up2) and not is_contain(visited, up2) and not is_contain(queue, up2)
+            check_down2 = game.is_valid(down2) and not is_contain(visited, down2) and not is_contain(queue, down2)
+            check_left2 = game.is_valid(left2) and not is_contain(visited, left2) and not is_contain(queue, left2)
+            check_right2 = game.is_valid(right2) and not is_contain(visited, right2) and not is_contain(queue, right2)
+            if check_up1: queue.insert(0,up1)
+            if check_down1: queue.insert(0,down1)
+            if check_left1: queue.insert(0,left1)
+            if check_right1: queue.insert(0,right1)
+            if check_up2: queue.insert(0,up2)
+            if check_down2: queue.insert(0,down2)
+            if check_left2: queue.insert(0,left2)
+            if check_right2: queue.insert(0,right2)
+
+
+
 def DFS(game):
     stack = [game.initState]
     visited = []
@@ -528,6 +587,9 @@ def main(argv):
     game = Game(stage.start, stage.board, stage.buttons)
     if algs == 'DFS':
         solution = DFS(game)
+        show_map(solution)
+    elif algs == 'BFS':
+        solution = BFS(game)
         show_map(solution)
 
     # stage = imp.load_source('stage', 'stage/stage0.py')
