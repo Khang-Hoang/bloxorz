@@ -195,23 +195,23 @@ class Game:
     def __init__(self, start, board, buttons):
         self.initState = State(None, Block(
             Cube(start), Cube(start)), np.array(board), 0)
-        self.width, self.height = self.initState.board.shape
+        self.height, self.width = self.initState.board.shape
         self.buttons = buttons
 
     def is_valid(self, state):
         first = state.block.first
         second = state.block.second
         board = state.board
-        if first.x < 0 or first.x >= self.width:
+        if first.x < 0 or first.x >= self.height:
             return False
 
-        if first.y < 0 or first.y >= self.height:
+        if first.y < 0 or first.y >= self.width:
             return False
 
-        if second.x < 0 or second.x >= self.width:
+        if second.x < 0 or second.x >= self.height:
             return False
 
-        if second.y < 0 or second.y >= self.height:
+        if second.y < 0 or second.y >= self.width:
             return False
 
         if board[first.x, first.y] == 0:
@@ -318,6 +318,7 @@ def DFS(game):
             if check_down2: stack.append(down2)
             if check_left2: stack.append(left2)
             if check_right2: stack.append(right2)
+
 
 
 def DFS1(state, visited):
@@ -432,7 +433,91 @@ def show_map(states):
         pygame.display.update()
 
 
+def play(game):
+    # init game dimensions
+    TILESIZE = 50
+    MAPHEIGHT, MAPWIDTH = game.height, game.width
+    # a dictionary linking resources to colours
+    BLACK    = ( 44,  62,  80)
+    GREY     = (189, 195, 199)
+    ORANGE   = (205,  97,  51)
+    CUBE     = (192,  57,  43)
+    OBUTTON  = (116, 185, 255)
+    XBUTTON  = ( 41, 128, 185)
+    TELEPORT = ( 30,  55, 153)
+
+    colors = {
+        0: BLACK,
+        1: GREY,
+        2: ORANGE,
+        10: OBUTTON,
+        20: XBUTTON,
+        30: TELEPORT,
+        100: BLACK
+    }
+    pygame.init()
+    DISPLAYSURF = pygame.display.set_mode(
+        (MAPWIDTH*TILESIZE, MAPHEIGHT*TILESIZE))
+    state = game.initState
+    controlled = 1
+    while True:
+        # get all the user events
+        for event in pygame.event.get():
+            # if the user wants to quit
+            if event.type == pygame.QUIT:
+                # and the game and close the window
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    if state.block.is_stick():
+                        state = game.get_next_state(state, 'up', 0)
+                    else:
+                        state = game.get_next_state(state, 'up', controlled)
+                if event.key == pygame.K_DOWN:
+                    if state.block.is_stick():
+                        state = game.get_next_state(state, 'down', 0)
+                    else:
+                        state = game.get_next_state(state, 'down', controlled)
+                if event.key == pygame.K_LEFT:
+                    if state.block.is_stick():
+                        state = game.get_next_state(state, 'left', 0)
+                    else:
+                        state = game.get_next_state(state, 'left', controlled)
+                if event.key == pygame.K_RIGHT:
+                    if state.block.is_stick():
+                        state = game.get_next_state(state, 'right', 0)
+                    else:
+                        state = game.get_next_state(state, 'right', controlled)
+                if event.key == pygame.K_SPACE:
+                    controlled = 1 if controlled == 2 else 1
+
+        # loop through each row
+        first = state.block.first
+        second = state.block.second
+        pygame.display.set_caption(
+            'step %d, direct: %s' % (state.step, state.direct))
+        for row in range(MAPHEIGHT):
+            # loop through each column in the row
+            for column in range(MAPWIDTH):
+                # draw the resource at that position in the tilemap, using the correct colour
+                pygame.draw.rect(DISPLAYSURF, colors[state.board[row, column]], (
+                    column*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
+        pygame.draw.rect(DISPLAYSURF, CUBE, (first.y*TILESIZE,
+                                             first.x*TILESIZE, TILESIZE, TILESIZE))
+        pygame.draw.rect(DISPLAYSURF, CUBE, (second.y*TILESIZE,
+                                             second.x*TILESIZE, TILESIZE, TILESIZE))
+        # update the display
+        pygame.display.update()
+
+
 def main(argv):
+
+    # for testing map
+    # stage = imp.load_source('stage', 'stage/stage17.py')
+    # game = Game(stage.start, stage.board, stage.buttons)
+    # play(game)
+
     if len(sys.argv) < 3:
         print('not enough input arguments')
         return 1
@@ -441,7 +526,6 @@ def main(argv):
     level = sys.argv[2]
     stage = imp.load_source('stage', 'stage/stage%s.py' % level)
     game = Game(stage.start, stage.board, stage.buttons)
-    # show_map([game.initState])
     if algs == 'DFS':
         solution = DFS(game)
         show_map(solution)
