@@ -262,6 +262,7 @@ def is_contain(array, state):
     return False
 
 
+
 def BFS(game):
     queue = [game.initState]
     visited = []
@@ -378,49 +379,6 @@ def DFS(game):
             if check_left2: stack.append(left2)
             if check_right2: stack.append(right2)
 
-
-
-def DFS1(state, visited):
-    board = state.board
-    block = state.block
-    first = block.first
-    second = block.second
-    solutions = []
-    if visited == None:
-        visited = []
-    visited.append(state)
-    if first.x == second.x and first.y == second.y and board[first.x, first.y] == 100:
-        solution = []
-        while state.traceback:
-            solution.insert(0, state)
-            state = state.traceback
-        solution.insert(0, state)
-        #print solution
-        # for state in solution:
-            # print(state.direct, end=" ")
-        # print("")
-        solutions.append(solution)
-        return solutions
-    if block.is_stick():
-        up = game.get_next_state(state, 'up', 0)
-        down = game.get_next_state(state, 'down', 0)
-        left = game.get_next_state(state, 'left', 0)
-        right = game.get_next_state(state, 'right', 0)
-        check_up = game.is_valid(up) and not is_contain(visited, up)
-        check_down = game.is_valid(down) and not is_contain(visited, down)
-        check_left = game.is_valid(left) and not is_contain(visited, left)
-        check_right = game.is_valid(right) and not is_contain(visited, right)
-        if len(solutions) > 0: return solutions
-        if check_up:
-            solutions.extend(DFS1(up, copy.deepcopy(visited)))
-        if check_down:
-            solutions.extend(DFS1(down, copy.deepcopy(visited)))
-        if check_left:
-            solutions.extend(DFS1(left, copy.deepcopy(visited)))
-        if check_right:
-            solutions.extend(DFS1(right, copy.deepcopy(visited)))
-    return solutions
-    
 
 
 def show_map(states):
