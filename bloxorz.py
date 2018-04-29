@@ -399,18 +399,24 @@ def show_map(states):
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    if (step > 0):
+                if event.key == pygame.K_COMMA:
+                    if step > 0:
                         step = step - 1
-                if event.key == pygame.K_RIGHT:
-                    if (step < length - 1):
+                if event.key == pygame.K_PERIOD:
+                    if step < length - 1:
                         step = step + 1
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and step > 0:
+            step = step - 1
+        if keys[pygame.K_RIGHT] and step < length - 1:
+            step = step + 1
         # loop through each row
         state = states[step]
         first = state.block.first
         second = state.block.second
         pygame.display.set_caption(
-            'step %d, direct: %s' % (step, state.direct))
+            'step %d, direct: %s' % (state.step, state.direct))
         for row in range(MAPHEIGHT):
             # loop through each column in the row
             for column in range(MAPWIDTH):
