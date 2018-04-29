@@ -392,57 +392,65 @@ def show_map(states):
     length = len(states)
     while True:
         # get all the user events
-        for event in pygame.event.get():
+        # for event in pygame.event.get():
             # if the user wants to quit
-            if event.type == pygame.QUIT:
+            # if event.type == pygame.QUIT:
                 # and the game and close the window
-                pygame.quit()
-                sys.exit()
-            elif event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_COMMA:
-                    if step > 0:
-                        step = step - 1
-                if event.key == pygame.K_PERIOD:
-                    if step < length - 1:
-                        step = step + 1
-
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and step > 0:
-            step = step - 1
-        if keys[pygame.K_RIGHT] and step < length - 1:
-            step = step + 1
+                # pygame.quit()
+                # sys.exit()            
+            # elif event.type == pygame.KEYDOWN:
+            #     if event.key == pygame.K_LEFT:
+            #         if (step > 0):
+            #             step = step - 1
+            #     if event.key == pygame.K_RIGHT:
+            #         if (step < length - 1):
+            #             step = step + 1            
+        step += 1
         # loop through each row
         state = states[step]
         first = state.block.first
         second = state.block.second
         pygame.display.set_caption(
-            'step %d, direct: %s' % (state.step, state.direct))
+            'step %d, direct: %s' % (step, state.direct))
         for row in range(MAPHEIGHT):
             # loop through each column in the row
             for column in range(MAPWIDTH):
+                pos = state.board[row, column]
+                color = colors[pos]
+                text = None
+                coords = (column*TILESIZE, row*TILESIZE, TILESIZE/2, TILESIZE/2)
+                if pos == 10:
+                    # OBUTTON
+                    text = pygame.font.SysFont("sans", 40).render("O", True, (0,0,0))
+                elif pos == 20:
+                    # XBUTTON
+                    text = pygame.font.SysFont("sans", 40).render("X", True, (0,0,0))
+                elif pos == 30:
+                    # TELEPORT
+                    text = pygame.font.SysFont("sans", 40).render("( )", True, (0,0,0))                                
                 # draw the resource at that position in the tilemap, using the correct colour
-                pygame.draw.rect(DISPLAYSURF, colors[state.board[row, column]], (
+                pygame.draw.rect(DISPLAYSURF, color, (
                     column*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
+                if text:
+                    DISPLAYSURF.blit(text, coords)
         pygame.draw.rect(DISPLAYSURF, CUBE, (first.y*TILESIZE,
                                              first.x*TILESIZE, TILESIZE, TILESIZE))
         pygame.draw.rect(DISPLAYSURF, CUBE, (second.y*TILESIZE,
                                              second.x*TILESIZE, TILESIZE, TILESIZE))
+
         # update the display
         pygame.display.update()
+        pygame.time.delay(500)
 
 
-def main(argv):
-    if len(sys.argv) < 3:
-        print('not enough input arguments')
-        return 1
+if __name__ == "__main__":
 
-    algs = sys.argv[1]
-    level = sys.argv[2]
-    stage = imp.load_source('stage', 'stage/stage%s.py' % level)
+
+    stage = imp.load_source('stage', 'stage/stage10.py')
     game = Game(stage.start, stage.board, stage.buttons)
-    if algs == 'DFS':
-        solution = DFS(game)
-        show_map(solution)
+    solution = DFS(game)
+    show_map(solution)
+
 
     # stage = imp.load_source('stage', 'stage/stage0.py')
     # game = Game(stage.start, stage.board, stage.buttons)
@@ -619,7 +627,3 @@ def main(argv):
     # state = game.get_next_state(state, 'right', 0)
     # states.append(state)
     # show_map(states)
-
-
-if __name__ == "__main__":
-    main(sys.argv)
