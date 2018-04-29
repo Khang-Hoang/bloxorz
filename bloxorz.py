@@ -269,6 +269,7 @@ def DFS(game):
     while stack:
         state = stack.pop()
         visited.append(state)
+        # print(state.direct)
         board = state.board
         block = state.block
         first = state.block.first
@@ -368,13 +369,13 @@ def show_map(states):
     TILESIZE = 50
     MAPHEIGHT, MAPWIDTH = initState.board.shape
     # a dictionary linking resources to colours
-    BLACK = (44,  62,  80)
-    GREY = (189, 195, 199)
-    ORANGE = (205,  97,  51)
-    CUBE = (192,  57,  43)
-    OBUTTON = (52, 152, 219)
-    XBUTTON = (41, 128, 185)
-    TELEPORT = (30,  55, 153)
+    BLACK    = ( 44,  62,  80)
+    GREY     = (189, 195, 199)
+    ORANGE   = (205,  97,  51)
+    CUBE     = (192,  57,  43)
+    OBUTTON  = (116, 185, 255)
+    XBUTTON  = ( 41, 128, 185)
+    TELEPORT = ( 30,  55, 153)
 
     colors = {
         0: BLACK,
@@ -440,6 +441,7 @@ def main(argv):
     level = sys.argv[2]
     stage = imp.load_source('stage', 'stage/stage%s.py' % level)
     game = Game(stage.start, stage.board, stage.buttons)
+    # show_map([game.initState])
     if algs == 'DFS':
         solution = DFS(game)
         show_map(solution)
