@@ -431,14 +431,18 @@ def show_map(states):
         pygame.display.update()
 
 
-if __name__ == "__main__":
+def main(argv):
+    if len(sys.argv) < 3:
+        print('not enough input arguments')
+        return 1
 
-
-    stage = imp.load_source('stage', 'stage/stage10.py')
+    algs = sys.argv[1]
+    level = sys.argv[2]
+    stage = imp.load_source('stage', 'stage/stage%s.py' % level)
     game = Game(stage.start, stage.board, stage.buttons)
-    solution = DFS(game)
-    show_map(solution)
-
+    if algs == 'DFS':
+        solution = DFS(game)
+        show_map(solution)
 
     # stage = imp.load_source('stage', 'stage/stage0.py')
     # game = Game(stage.start, stage.board, stage.buttons)
@@ -615,3 +619,7 @@ if __name__ == "__main__":
     # state = game.get_next_state(state, 'right', 0)
     # states.append(state)
     # show_map(states)
+
+
+if __name__ == "__main__":
+    main(sys.argv)
