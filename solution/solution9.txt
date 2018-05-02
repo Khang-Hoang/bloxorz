@@ -1,0 +1,1 @@
+None,right,down,right,right,right,right,right,right,up,right,down,left,left,left,left,left,up,down,right,right,right,right,right,down,

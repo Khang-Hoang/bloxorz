@@ -4,6 +4,7 @@ import numpy as np
 import imp
 import sys
 import pygame
+import os
 
 
 class Cube:
@@ -375,6 +376,7 @@ def BFS(game):
         second = state.block.second
 
         if first.x == second.x and first.y == second.y and board[first.x, first.y] == 100:
+            print("Find the solution!")
             while state.traceback:
                 solution.insert(0, state)
                 state = state.traceback
@@ -488,15 +490,44 @@ def show_map(states):
         pygame.display.update()
         pygame.time.delay(500)
 
+def save_solution(solution, stage):
+    # check exist the folder
+    if not os.path.exists('solution/'):
+        os.mkdir('solution/')
+    file = open('solution/solution%d.txt' % stage, 'w')
+    for s in solution:
+        direct = s.direct                
+        file.write("%s," % (direct))
+    file.write("\n")
+    file.close()
 
-if __name__ == "__main__":
+def read_solution(stage_id):
+    file = open('solution/solution%d.txt' % stage_id, 'r')
+    moves = file.read()
+    file.close()
+    moves = moves.split(',')[1:-1]
+    print(moves)    
 
-    for i in range(0, 11):
+def play(stage_id):    
+    stage = imp.load_source('stage', 'stage/stage%d.py' % stage_id)
+    game = Game(stage.start, stage.board, stage.buttons)
+    # read the solution of the stage
+    moves = read_solution(stage_id)
+    return True
+
+    
+if __name__ == "__main__":        
+    for i in range(1, 34):
         print("STAGE %d" % i)
-        stage = imp.load_source('stage', 'stage/stage%d.py' % i)
+        stage = imp.load_source('stage', 'stage/stage%d.py' % i)    
         game = Game(stage.start, stage.board, stage.buttons)
+
         # test for DFS
         # solution = DFS(game)
+
         # test for BFS
-        solution = BFS(game)
+        solution = BFS(game)    
+        
+        save_solution(solution, i)
         show_map(solution)
+        pygame.time.delay(5*1000)
