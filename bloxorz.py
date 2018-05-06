@@ -4,6 +4,7 @@ import numpy as np
 import imp
 import sys
 import pygame
+import time
 
 
 class Cube:
@@ -527,7 +528,7 @@ def play(game):
         # update the display
         pygame.display.update()
 
-
+# @profile
 def main(argv):
 
     # for testing map
@@ -535,197 +536,42 @@ def main(argv):
     # game = Game(stage.start, stage.board, stage.buttons)
     # play(game)
 
+    # print("stage\t\tmoves\t\ttime_usage(s)\t\tmem_usage(MiB)")
+    # algs = sys.argv[1]
+    # for level in range(1,34):
+    #     stage = imp.load_source('stage', 'stage/stage%s.py' % level)
+    #     game = Game(stage.start, stage.board, stage.buttons)
+    #     if algs == 'DFS':
+    #         start = time.time()
+    #         solution = DFS(game)
+    #         time_usage = time.time() - start
+    #         print('%d\t\t%d\t\t%f' % (level, len(solution) - 1, time_usage))
+    #     elif algs == 'BFS':
+    #         start = time.time()
+    #         solution = BFS(game)
+    #         time_usage = time.time() - start
+    #         print('%d\t\t%d\t\t%f' % (level, len(solution) - 1, time_usage))
+
     if len(sys.argv) < 3:
         print('not enough input arguments')
         return 1
-
+    
     algs = sys.argv[1]
     level = sys.argv[2]
     stage = imp.load_source('stage', 'stage/stage%s.py' % level)
     game = Game(stage.start, stage.board, stage.buttons)
     if algs == 'DFS':
+        start = time.time()
         solution = DFS(game)
+        time_usage = time.time() - start
+        print('%f s' % time_usage)
         show_map(solution)
     elif algs == 'BFS':
+        start = time.time()
         solution = BFS(game)
+        time_usage = time.time() - start
+        print('%f s' % time_usage)
         show_map(solution)
-
-    # stage = imp.load_source('stage', 'stage/stage0.py')
-    # game = Game(stage.start, stage.board, stage.buttons)
-    # solutions = DFS1(game.initState, [])
-    # solution = solutions[0]
-    # min_sol = len(solution)
-    # for item in solutions:
-    #     if len(item) < min_sol:
-    #         solution = item
-    #         min_sol = len(item)
-    # print(len(solutions))
-    # show_map(solution)
-    # show_map([state])
-    
-    # """Stage 1: R-2, D-1, R-3, D-1"""
-    # stage = imp.load_source('stage', 'stage/stage1.py')
-    # game = Game(stage.start, stage.board, stage.buttons)
-    # states = []
-    # state = game.initState
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # show_map(states)
-
-    # """Stage 2: U-1, R-1, D-1, R-3, U-3, R-1, D-2, R-4, U-1, L-1, U-1"""
-    # stage = imp.load_source('stage', 'stage/stage1.py')
-    # game = Game(stage.start, stage.board, stage.buttons)
-    # state = game.initState
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # show_map(states)
-
-    # """Stage 4: U-1, L-1, U-1, R-2, U-1, R-6, D-1, R-1, D-5, R-1, U-1, L-6, D-1"""
-    # stage = imp.load_source('stage', 'stage/stage4.py')
-    # game = Game(stage.start, stage.board, stage.buttons)
-    # states = []
-    # state = game.initState
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'left', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 0)
-    # states.append(state)
-    # show_map(states)
-
-    # """Stage 8: R-2, D-3, R-2, S-1, U-3, R-2"""
-    # stage = imp.load_source('stage', 'stage/stage8.py')
-    # game = Game(stage.start, stage.board, stage.buttons)
-    # states = []
-    # state = game.initState
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 1)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 1)
-    # states.append(state)
-    # state = game.get_next_state(state, 'down', 1)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 1)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 1)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 2)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 2)
-    # states.append(state)
-    # state = game.get_next_state(state, 'up', 2)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 2)
-    # states.append(state)
-    # state = game.get_next_state(state, 'right', 0)
-    # states.append(state)
-    # show_map(states)
-
 
 if __name__ == "__main__":
     main(sys.argv)

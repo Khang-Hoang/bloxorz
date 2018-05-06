@@ -1,0 +1,125 @@
+giải thuật DFS:
+pseudo code:
+    init a stack with the initState
+    while stack is not empty:
+        pop current state from the top of the stack
+        append current state to the visited list
+        if current state is goal state then
+            trace back to the init state
+            return the path
+        if in current state, the block is not splited into two cube then
+            for each direction (up, down, left, right)
+                get the next state and assign the current state to the traceback pointer of the next state
+                if the next state is a valid move and does not contain in stack and visited list then
+                insert this state on the top of the stack
+        else int the current state, the block is splited into two cube
+            for each cube and for each directtion (up, down, left, right)
+                get the next state and assign the current state to the traceback pointer of the next state
+                if the next state is a valid move and does not contain in stack and visited list then
+                insert this state on the top the stack
+                    
+                
+stage        moves        time_usage(s)        mem_usage(MiB)
+1            7            0.037790             0.227
+2            68           0.204520             0.660
+3            38           0.018112             0.195
+4            39           0.038491             0.301
+5            82           0.180361             0.574
+6            51           0.034505             0.215
+7            69           0.080591             0.477
+8            98           0.102024             0.734
+9            148          0.885343             1.172
+10           505          2.462539             3.504
+11           49           0.086259             0.457
+12           81           0.084052             0.324
+13           57           0.063948             0.285
+14           106          0.244018             0.715
+15           186          0.756210             1.434
+16           44           0.044488             0.348
+17           315          0.728790             1.719
+18           175          0.336812             0.906
+19           87           0.077171             0.414
+20           207          22.120543            6.398
+21           72           0.072447             0.324
+22           124          0.131971             0.410
+23           65           0.089900             0.469
+24           81           0.066726             0.441
+25           96           0.222310             0.551
+26           508          15.259500            5.969
+27           54           0.029744             0.203
+28           748          15.629593            7.750
+29           114          1.061622             1.965
+30           134          0.168223             0.715
+31           187          0.466690             1.070
+32           126          0.297273             0.879
+33           79           0.768634             1.535
+
+
+giải thuật BFS:
+pseudo code:
+BFS(initState):
+    init a queue with the initState
+    while queue is not empty:
+        get the first element of the queue as current state
+        append current state to the visited list
+        if current state is goal state then
+            trace back to the init state
+            return the path
+        if in current state, the block is not splited into two cube then
+            for each direction (up, down, left, right)
+                get the next state and assign the current state to the traceback pointer of the next state
+                if the next state is a valid move and does not contain in queue and visited list then
+                append this state to the end of the queue
+        else int the current state, the block is splited into two cube
+            for each cube and for each directtion (up, down, left, right)
+                get the next state and assign the current state to the traceback pointer of the next state
+                if the next state is a valid move and does not contain in stack and visited list then
+                append this state to the end of the queue
+                    
+
+stage        moves        time_usage(s)        mem_usage(MiB)
+1            7            0.026642             0.211
+2            17           0.197221             0.613
+3            19           0.040512             0.297
+4            28           0.031460             0.266
+5            40           0.238506             0.648
+6            35           0.050495             0.266
+7            44           0.097972             0.484
+8            10           0.810762             1.160
+9            24           1.401822             1.191
+10           55           9.412006             5.004
+11           47           0.098352             0.508 
+12           51           0.328065             0.793 
+13           46           0.065495             0.305
+14           66           0.350922             0.875 
+15           57           13.513596            6.086 
+16           28           0.129300             0.461
+17           106          1.290795             1.816 
+18           78           0.592952             1.340 
+19           67           0.128750             0.438 
+20           56           37.136785            10.109 
+21           71           0.132933             0.492 
+22           65           0.228290             0.676
+23           28           0.290642             1.000 
+24           57           0.438923             1.031 
+25           55           0.364031             1.023
+26           104          53.506034            9.250 
+27           52           0.287106             0.945 
+28           100          25.697860            8.199 
+29           98           3.697410             3.863 
+30           114          0.469509             1.113 
+31           91           0.984992             1.918 
+32           77           0.497831             1.148 
+33           65           0.827865             1.332 
+
+giải thích:
+- Với 2 giải thuật trên, các bước di chuyển tiếp theo đều tạo ra trạng thái khác với tất cả các trạng thái trước đó,
+các trạng thái sinh ra tiếp theo nếu đã tồn tại trong stack(queue) sẽ không đc thêm vào stack(queue).
+
+- giải thuật BFS lần lượt sinh và thử tất các node con của node đang xét nên tìm ra lời giải có độ sâu thấp hơn DFS (hay tìm ra lời giải ngắn) 
+nhưng tốn nhiều thời gian thực thi hơn ngược lại
+
+- giải thuật DFS tìm ra lời giải dài hơn nhưng tốn ít thời gian thực thi do không cần phải xét tất cả các node con
+
+- các stage có nút split block thành 2 cube có thời gian thực thi lâu hơn do cần phải xét 8 hướng di chuyển (2 cube mỗi cube di chuyển 4 hướng)
+nên các node trong trạng thái này sẽ sinh ra 8 node con

@@ -1,3 +1,9 @@
+********
+Creat by Hoang Hong Khang
+Date : 1/5/2018
+version: 1.0
+********
+
 0: set bằng 0
 1: set bằng 1
 2: toggle 1->0 và 0->1
