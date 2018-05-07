@@ -440,13 +440,35 @@ def show_map(states):
         for row in range(MAPHEIGHT):
             # loop through each column in the row
             for column in range(MAPWIDTH):
+                pos = state.board[row, column]
+                color = colors[pos]
+                text = None
+                coords = (column*TILESIZE, row*TILESIZE, TILESIZE/2, TILESIZE/2)
+                if pos == 10:
+                    # OBUTTON
+                    text = pygame.font.SysFont("sans", 40).render("O", True, (0,0,0))
+                elif pos == 20:
+                    # XBUTTON
+                    text = pygame.font.SysFont("sans", 40).render("X", True, (0,0,0))
+                elif pos == 30:
+                    # TELEPORT
+                    text = pygame.font.SysFont("sans", 40).render("( )", True, (0,0,0))                                
                 # draw the resource at that position in the tilemap, using the correct colour
-                pygame.draw.rect(DISPLAYSURF, colors[state.board[row, column]], (
+                pygame.draw.rect(DISPLAYSURF, color, (
                     column*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
+                if text:
+                    DISPLAYSURF.blit(text, coords)
         pygame.draw.rect(DISPLAYSURF, CUBE, (first.y*TILESIZE,
                                              first.x*TILESIZE, TILESIZE, TILESIZE))
         pygame.draw.rect(DISPLAYSURF, CUBE, (second.y*TILESIZE,
                                              second.x*TILESIZE, TILESIZE, TILESIZE))
+        #         # draw the resource at that position in the tilemap, using the correct colour
+        #         pygame.draw.rect(DISPLAYSURF, colors[state.board[row, column]], (
+        #             column*TILESIZE, row*TILESIZE, TILESIZE, TILESIZE))
+        # pygame.draw.rect(DISPLAYSURF, CUBE, (first.y*TILESIZE,
+        #                                      first.x*TILESIZE, TILESIZE, TILESIZE))
+        # pygame.draw.rect(DISPLAYSURF, CUBE, (second.y*TILESIZE,
+        #                                      second.x*TILESIZE, TILESIZE, TILESIZE))
         # update the display
         pygame.display.update()
 
